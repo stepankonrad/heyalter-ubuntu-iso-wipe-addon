@@ -10,12 +10,14 @@ jobs:
           ref: initial-import
       - run: wget --directory-prefix=wipe http://de.archive.ubuntu.com/ubuntu/pool/universe/n/nwipe/nwipe_0.34-1build2_amd64.deb
       - run: wget --directory-prefix=wipe https://github.com/TigerOnVaseline/ata-secure-erase/raw/master/ata-secure-erase.sh
-      - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/ubuntu_2404/files/heyalter_install.yaml?ref_type=heads&inline=false
+      - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/ubuntu_2404/files/heyalter_install.yaml
       - run: echo "  early-commands:" >> heyalter_install.yaml
       - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_install.yaml
       - uses: actions/upload-artifact@v4
         with:
           name: wipe_addon.zip
-          path: wipe/
+          path: |
+            wipe/
+            *.yaml
           retention-days: 1
           overwrite: true
