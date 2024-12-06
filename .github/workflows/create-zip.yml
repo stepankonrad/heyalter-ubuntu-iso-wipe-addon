@@ -15,7 +15,7 @@ jobs:
       - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_install.yaml
       - uses: actions/upload-artifact@v4
         with:
-          name: wipe_addon.zip
+          name: wipe_addon
           path: |
             wipe/
             *.yaml

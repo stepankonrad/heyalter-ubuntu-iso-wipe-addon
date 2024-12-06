@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# ROOT=/cdrom/wipe
-ROOT=./wipe/
+ROOT=/cdrom/wipe
 
 install_tools () {
   echo $BASH_SOURCE $FUNCNAME $1
