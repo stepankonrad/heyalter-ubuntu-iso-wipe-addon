@@ -10,7 +10,9 @@ jobs:
       - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/ubuntu_2404/files/heyalter_install.yaml?ref_type=heads&inline=false
       - run: echo "  early-commands:" >> heyalter_install.yaml
       - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_install.yaml
-      - run: zip -r release.zip wipe/
-      - uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v4
         with:
-          files: release.zip
+          name: wipe_addon.zip
+          path: wipe/
+          retention-days: 1
+          overwrite: true
