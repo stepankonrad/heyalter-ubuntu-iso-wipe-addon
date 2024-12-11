@@ -32,7 +32,7 @@ wipe_nvme () {
   nvme format --ses=1 --force $1
   if [ $? -eq 0 ]; then return 0; fi
 
-  return $?
+  return 1
 }
 
 wipe_ata () {
@@ -45,33 +45,30 @@ wipe_ata () {
   $ROOT/ata-secure-erase.sh -f $1
   if [ $? -eq 0 ]; then return 0; fi
 
-  return $?
+  return 1
 }
 
 fast_wipe_all () {
-  DISKDEV_FAILED_LIST=""
+  RESULT=0
   for d in $DISKDEV_LIST
   do
     case "$d" in 
       *nvme*)
-        wipe_nvme $d;; 
+        wipe_nvme $d
+        if [ $? -ne 0 ]; then RESULT=1; fi;;
       *)
-        wipe_ata $d;;
+        wipe_ata $d
+        if [ $? -ne 0 ]; then RESULT=1; fi;;
     esac
 
-    if [ $? -eq 0 ]; then continue; fi
-
-    DISKDEV_FAILED_LIST="$DISKDEV_FAILED_LIST $d"
   done
-  if [[ -z "$DISKDEV_FAILED_LIST" ]]; then
-    return 1
-  fi
+  return $RESULT
 }
 
 wipe_nwipe () { 
-  echo $BASH_SOURCE $FUNCNAME "$DISKDEV_FAILED_LIST"
+  echo $BASH_SOURCE $FUNCNAME
 
-  nwipe -m random --nogui --verify=off --autonuke --nousb "$DISKDEV_FAILED_LIST"
+  nwipe -m random --nogui --verify=off --autonuke --nousb
 
   if [ $? -ne 0 ]; then exit 1; fi
 }
