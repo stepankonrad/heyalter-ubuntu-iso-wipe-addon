@@ -22,13 +22,20 @@ populate_device_list () {
   echo $BASH_SOURCE $FUNCNAME $DISKDEV_LIST
 }
 
+suspend_to_unlock_ssd () {
+  echo $BASH_SOURCE $FUNCNAME $1
+
+  # try to sleep for 15 seconds or indefinately if that does not work
+  rtcwake -s 15 -m mem || systemctl suspend -i
+}
+
 wipe_nvme () {
   echo $BASH_SOURCE $FUNCNAME $1
 
   nvme format --ses=1 --force $1
   if [ $? -eq 0 ]; then return 0; fi
 
-  systemctl suspend -i
+  suspend_to_unlock_ssd
   nvme format --ses=1 --force $1
   if [ $? -eq 0 ]; then return 0; fi
 
@@ -41,7 +48,7 @@ wipe_ata () {
   $ROOT/ata-secure-erase.sh -f $1
   if [ $? -eq 0 ]; then return 0; fi
 
-  systemctl suspend -i
+  suspend_to_unlock_ssd
   $ROOT/ata-secure-erase.sh -f $1
   if [ $? -eq 0 ]; then return 0; fi
 
@@ -65,7 +72,7 @@ fast_wipe_all () {
   return $RESULT
 }
 
-wipe_nwipe () { 
+wipe_nwipe_all () { 
   echo $BASH_SOURCE $FUNCNAME
 
   nwipe -m random --nogui --verify=off --autonuke --nousb
@@ -73,7 +80,7 @@ wipe_nwipe () {
   if [ $? -ne 0 ]; then exit 1; fi
 }
 
-check_all_zero () {
+check_zero_all () {
   echo $BASH_SOURCE $FUNCNAME
 
   nwipe -m verify_zero --nogui --autonuke --nousb
@@ -88,10 +95,10 @@ main () {
 
   # fallback
   if [ $? -ne 0 ]; then
-    wipe_nwipe
+    wipe_nwipe_all
   fi
 
-  check_all_zero
+  check_zero_all
 }
 
 main

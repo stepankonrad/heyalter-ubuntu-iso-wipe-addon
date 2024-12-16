@@ -19,5 +19,5 @@ jobs:
           path: |
             wipe/
             *.yaml
-          retention-days: 1
+          retention-days: 30
           overwrite: true
