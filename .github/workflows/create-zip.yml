@@ -19,12 +19,12 @@ jobs:
       - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_install.yaml
       - run: echo "  early-commands:" >> heyalter_nolvm.yaml
       - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_nolvm.yaml
-      - run: echo "menuentry "Install HeyAlter Ubuntu (no wipe!)" {" >> grub.cfg
+      - run: echo "menuentry \"Install HeyAlter Ubuntu (no wipe!)\" {" >> grub.cfg
       - run: echo "	set gfxpayload=keep" >> grub.cfg
       - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_install_nowipe.yaml ---" >> grub.cfg
       - run: echo "	initrd	/casper/initrd" >> grub.cfg
       - run: echo "}" >> grub.cfg
-      - run: echo "menuentry "Install HeyAlter Ubuntu without lvm (no wipe!)" {" >> grub.cfg
+      - run: echo "menuentry \"Install HeyAlter Ubuntu without lvm (no wipe!)\" {" >> grub.cfg
       - run: echo "	set gfxpayload=keep" >> grub.cfg
       - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_install_nowipe.yaml ---" >> grub.cfg
       - run: echo "	initrd	/casper/initrd" >> grub.cfg
