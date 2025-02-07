@@ -29,11 +29,13 @@ jobs:
       - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_install_nowipe.yaml ---" >> grub.cfg
       - run: echo "	initrd	/casper/initrd" >> grub.cfg
       - run: echo "}" >> grub.cfg
+      - run: mkdir -p boot/grub
+      - run: mv grub.cfg boot/grub/
       - uses: actions/upload-artifact@v4
         with:
           name: wipe_addon
           path: |
+            boot/
             wipe/
             *.yaml
-            *.cfg
           overwrite: true
