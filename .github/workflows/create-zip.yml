@@ -9,6 +9,7 @@ jobs:
         with:
           ref: initial-import
       - run: wget --directory-prefix=wipe http://de.archive.ubuntu.com/ubuntu/pool/universe/n/nwipe/nwipe_0.34-1build2_amd64.deb
+      - run: wget --directory-prefix=wipe http://de.archive.ubuntu.com/ubuntu/pool/main/n/nvme-cli/nvme-cli_2.8-1build2_amd64.deb
       - run: wget --directory-prefix=wipe https://github.com/TigerOnVaseline/ata-secure-erase/raw/master/ata-secure-erase.sh
       - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/new_2404/files/heyalter_install.yaml
       - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/new_2404/files/heyalter_nolvm.yaml
