@@ -1,0 +1,42 @@
+name: Create Release ZIP
+run-name: release ZIP test run on ${{ github.event_name }}
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: initial-import
+      - run: wget --directory-prefix=wipe http://de.archive.ubuntu.com/ubuntu/pool/universe/n/nwipe/nwipe_0.34-1build2_amd64.deb
+      - run: wget --directory-prefix=wipe http://de.archive.ubuntu.com/ubuntu/pool/main/n/nvme-cli/nvme-cli_2.8-1build2_amd64.deb
+      - run: wget --directory-prefix=wipe https://github.com/TigerOnVaseline/ata-secure-erase/raw/master/ata-secure-erase.sh
+      - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/new_2404/files/heyalter_install.yaml
+      - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/new_2404/files/heyalter_nolvm.yaml
+      - run: wget https://gitli.stratum0.org/heyalter/heyalter-ubuntu-iso/-/raw/new_2404/files/grub.cfg
+      - run: cp heyalter_install.yaml heyalter_install_nowipe.yaml
+      - run: cp heyalter_nolvm.yaml heyalter_nolvm_nowipe.yaml
+      - run: echo "  early-commands:" >> heyalter_install.yaml
+      - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_install.yaml
+      - run: echo "  early-commands:" >> heyalter_nolvm.yaml
+      - run: echo "    - sudo /cdrom/wipe/wipe_disks.sh" >> heyalter_nolvm.yaml
+      - run: echo "menuentry \"Install HeyAlter Ubuntu (no wipe!)\" {" >> grub.cfg
+      - run: echo "	set gfxpayload=keep" >> grub.cfg
+      - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_install_nowipe.yaml ---" >> grub.cfg
+      - run: echo "	initrd	/casper/initrd" >> grub.cfg
+      - run: echo "}" >> grub.cfg
+      - run: echo "menuentry \"Install HeyAlter Ubuntu without lvm (no wipe!)\" {" >> grub.cfg
+      - run: echo "	set gfxpayload=keep" >> grub.cfg
+      - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_nolvm_nowipe.yaml ---" >> grub.cfg
+      - run: echo "	initrd	/casper/initrd" >> grub.cfg
+      - run: echo "}" >> grub.cfg
+      - run: mkdir -p boot/grub
+      - run: mv grub.cfg boot/grub/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wipe_addon
+          path: |
+            boot/
+            wipe/
+            *.yaml
+          overwrite: true
