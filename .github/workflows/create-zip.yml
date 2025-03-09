@@ -27,7 +27,7 @@ jobs:
       - run: echo "}" >> grub.cfg
       - run: echo "menuentry \"Install HeyAlter Ubuntu without lvm (no wipe!)\" {" >> grub.cfg
       - run: echo "	set gfxpayload=keep" >> grub.cfg
-      - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_install_nowipe.yaml ---" >> grub.cfg
+      - run: echo "	linux	/casper/vmlinuz fsck.mode=skip noprompt autoinstall subiquity.autoinstallpath=/cdrom/heyalter_nolvm_nowipe.yaml ---" >> grub.cfg
       - run: echo "	initrd	/casper/initrd" >> grub.cfg
       - run: echo "}" >> grub.cfg
       - run: mkdir -p boot/grub
